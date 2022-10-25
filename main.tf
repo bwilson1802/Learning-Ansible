@@ -49,10 +49,22 @@ resource "aws_default_route_table" "btc-private-route-table" {
 } 
 
 resource "aws_subnet" "btc-public-subnet" {
-  count = 2
+  count = length(var.public_cidrs)
   vpc_id     = aws_vpc.btc-vpc.id
   cidr_block = var.public_cidrs[count.index]
   map_public_ip_on_launch = true
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+
+  tags = {
+    Name = "dev-${count.index + 1}"
+  }
+}
+
+resource "aws_subnet" "btc-private-subnet" {
+  count = length(var.private_cidrs)
+  vpc_id     = aws_vpc.btc-vpc.id
+  cidr_block = var.private_cidrs[count.index]
+  map_public_ip_on_launch = false
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
