@@ -14,11 +14,16 @@ resource "random_id" "btc-node-id" {
   count       = var.main_instance_count
 }
 
+resource "aws_key_pair" "btc-auth" {
+  key_name   = var.key_name
+  public_key = file(var.public_key_path)
+}
+
 resource "aws_instance" "btc-main" {
-  count         = var.main_instance_count
-  instance_type = var.main_instance_type
-  ami           = data.aws_ami.server-ami.id
-  # key_name = 
+  count                  = var.main_instance_count
+  instance_type          = var.main_instance_type
+  ami                    = data.aws_ami.server-ami.id
+  key_name               = aws_key_pair.btc-auth.id
   vpc_security_group_ids = [aws_security_group.btc-sg.id]
   subnet_id              = aws_subnet.btc-public-subnet[count.index].id
   root_block_device {
@@ -29,3 +34,4 @@ resource "aws_instance" "btc-main" {
     name = "dev-mch-${random_id.btc-node-id[count.index].dec}"
   }
 }
+
