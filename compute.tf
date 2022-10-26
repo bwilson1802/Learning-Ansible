@@ -26,6 +26,7 @@ resource "aws_instance" "btc-main" {
   key_name               = aws_key_pair.btc-auth.id
   vpc_security_group_ids = [aws_security_group.btc-sg.id]
   subnet_id              = aws_subnet.btc-public-subnet[count.index].id
+  user_data = templatefile("./main-userdata.tpl", {new_hostname = "dev-mch-${random_id.btc-node-id[count.index].dec}"})
   root_block_device {
     volume_size = var.main_vol_size
   }
