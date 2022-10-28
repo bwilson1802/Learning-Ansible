@@ -3,7 +3,7 @@ Derek Morgan DevOps in the Cloud with Terraform, Ansible, and Jenkins
 https://www.udemy.com/course/devops-in-the-cloud/learn/lecture/29615754#overview
 
 
-Log into AWS and open vpc and crate an enviornment
+Log into AWS and open vpc and crate an enviornment add inbound rule for all traffic / myIP
 select Ubuntu
 
 run
